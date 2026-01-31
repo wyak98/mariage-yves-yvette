@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<!--Configuration de base : définit la langue et l'adaptation aux écrans de téléphones-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitation Mariage</title>
+    
+    <!--Importation des polices depuis Google Fonts : Dancing Script pour le style écrit main-->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Liaison avec ton fichier de style CSS pour le design -->
+    <link rel="stylesheet" href="stylemariagepanofinal.css">
+</head>
+<body>
+
+  <!-- Élément audio : contient ta musique de mariage qui tournera en boucle (loop) -->
+    <audio id="weddingMusic" loop>
+        <source src="musique_de_mariage2.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Conteneur des rideaux : c'est l'écran de garde qui s'ouvre au clic (onclick) -->
+    <div class="curtain-container" id="curtains" onclick="openCurtains()">
+        <div class="curtain left"></div>
+        <div class="curtain right"></div>
+        <div class="click-hint">Cliquez pour ouvrir<br>l'invitation</div>
+    </div>
+
+    <!-- Bouton flottant pour couper ou activer le son (mute/unmute) -->
+    <button id="muteBtn" onclick="toggleMute()">🔈</button>
+
+    <!-- Enveloppe principale : contient toutes les pages de l'invitation -->
+    <div class="panorama-wrapper">
+        
+        <!-- ÉTAPE 1 : Page d'accueil avec la photo principale des mariés -->
+        <section class="step" id="step1">
+            <div class="photo-container">
+                <img src="images/medium-shot-couple-wearing-native-attire.jpg" alt="Les Mariés">
+            </div>
+            <h1>Nous nous marions !</h1>
+            <button class="next-btn" onclick="nextStep(2)">Entrer ➔</button>
+        </section>
+
+        <!-- ÉTAPE 2 : Présentation des familles et des noms des futurs époux -->
+        <section class="step" id="step2">
+            <p>Les Familles</p>
+            <h2> BONKOUNGOU </h2>
+            <h2> & </h2>
+            <h2> NASSA </h2>
+            <p>ont le plaisir de vous inviter à la célébration de mariage de leurs enfants</p>
+            <!-- Le cadre décoratif qui entoure vos deux prénoms -->
+            <div class="names-frame">YVES & YVETTE</div>
+            <button class="next-btn" onclick="nextStep('_cal')">Le Programme ➔</button>
+        </section>
+
+        <!-- ÉTAPE CALENDRIER : Affiche le mois de juin avec les jours 15 et 16 en couleur -->
+        <section class="step" id="step_cal">
+            <h2>Enregistrez la date</h2>
+            <p>Nous avons hâte de vous voir !</p>
+    
+            <div class="calendar-container">
+                <div class="calendar-month">JUIN 2026</div>
+                <div class="calendar-grid">
+                    <!-- En-têtes des jours de la semaine -->
+                    <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+                    <!-- Jours du mois : les classes 'highlight' créent le cercle doré sur le 15 et 16 -->
+                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span>
+                    <span>8</span><span>9</span><span>10</span><span>11</span><span class="highlight" >12</span><span class="highlight">13</span><span>14</span>
+                    <span>15</span> <span>16</span> <span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span>
+                    <span>24</span><span>25</span><span>26</span><span>27</span><span>28</span><span>29</span><span>30</span>
+                </div>
+            </div>
+            <button class="next-btn" onclick="nextStep(3)">Voir le programme ➔</button>
+        </section>
+
+        <!-- ÉTAPE 3 : Détails sur le mariage civil à la mairie -->
+        <section class="step" id="step3">
+            <h2>Mariage Civil</h2>
+            <p class="date-txt" style="color:#1a237e;">VENDREDI 12 JUIN 2026</p>
+            <p>🕒 14h30</p>
+            <div class="info-img"><img src="images/mairie-de-bobo.jpg" alt="Mairie"></div>
+            <!-- Lien Google Maps (à remplir entre les guillemets de href) -->
+            <a href="https://maps.app.goo.gl/Y44b8HubNuP9mUYXA" target="_blank" class="map-link">📍 Localisation Mairie</a>
+            <button class="next-btn" onclick="nextStep(4)">Ensuite... ➔</button>
+        </section>
+
+        <!-- ÉTAPE 4 : Détails sur le mariage religieux à l'église -->
+        <section class="step" id="step4">
+            <h2>Mariage Religieux</h2>
+            <p class="date-txt" style="color:#b08d23;">SAMEDI 13 JUIN 2026</p>
+            <p>🕒 10h30</p>
+            <div class="info-img"><img src="images/eglise-notre-dame-de-yagma.jpg" alt="Eglise"></div>
+            <a href="https://maps.app.goo.gl/QscWiUQ1nNJSRcjc9" target="_blank" class="map-link">📍 Localisation Église</a>
+            <button class="next-btn" onclick="nextStep(5)">La Fête ➔</button>
+        </section>
+
+        <!-- ÉTAPE 5 : Information sur le lieu et l'heure de la réception -->
+        <section class="step" id="step5">
+            <h2>La Réception</h2>
+            <p>Salle des banquets, Ouaga 2000</p>
+            <p>🕒 À partir de 16h00</p>
+            <div class="info-img"><img src="images/reception.jpg" alt="Réception"></div>
+            <a href="https://maps.app.goo.gl/HHvJ8ZyhJ4SGRSGh7" target="_blank" class="map-link">📍 Localisation de la Salle de Réception</a>
+            <button class="next-btn" onclick="nextStep(6)">Liste de Cadeaux ➔</button>
+        </section>
+
+        <!-- ÉTAPE 6 : Liste de souhaits des mariés avec cases à cocher (checkbox) -->
+        <section class="step" id="step6">
+            <h2>Liste de Cadeaux de Mariage</h2>
+            <div class="cadeaux-box">
+                <label><input type="checkbox"> Cuisinière multifonction</label><br>
+                <label><input type="checkbox"> Machine à laver</label><br>
+                <label><input type="checkbox"> Aspirateur </label><br>
+                <label><input type="checkbox"> Bon d'achat décoration </label><br>
+                <label><input type="checkbox"> Participation au voyage de noces </label>
+            </div>
+            <button class="next-btn" onclick="nextStep(7)">Confirmation de présence ➔</button>
+        </section>
+
+        <!-- ÉTAPE 7 : RSVP - Confirmation via WhatsApp avec choix du côté de l'invité -->
+        <section class="step" id="step7">
+            <h2>Confirmation</h2>
+            <div class="rsvp-box">
+                <!-- Boutons radio : le 'name' commun permet de ne choisir qu'une seule option -->
+                <label><input type="radio" name="invite" id="choiceMarie" checked> Invité du Marié</label><br><br>
+                <label><input type="radio" name="invite" id="choiceMariee"> Invité de la Mariée</label>
+            </div>
+            <button class="whatsapp-btn" onclick="sendWhatsApp()">Envoyer sur WhatsApp 📱</button>
+            <br>
+            <button class="next-btn" onclick="nextStep(8)">Compte à Rebours ➔</button>
+        </section>
+
+        <!-- ÉTAPE 8 : Le compte à rebours dynamique jusqu'au jour J -->
+        <section class="step" id="step8">
+            <h2>J-Moins...</h2>
+            <!-- Cet ID 'timer' est utilisé par le JavaScript pour afficher les jours -->
+            <div class="countdown-circle" id="timer">--</div>
+            <p>Avant le plus beau jour !</p>
+            <!-- Bouton retour : permet de recommencer la lecture à l'étape 1 -->
+            <button class="next-btn" onclick="nextStep(1)">Retour à l'accueil ↺</button>
+        </section>
+
+    </div>
+
+    <!-- Liaison avec ton fichier JavaScript qui gère toute l'interactivité -->
+    <script src="scriptmariagepanofinal.js"></script>
+</body>
+</html>

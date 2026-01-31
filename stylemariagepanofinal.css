@@ -1,0 +1,207 @@
+/* --- 1. BASE ET RÉINITIALISATION --- */
+* { 
+    margin: 0; padding: 0; 
+    /* Force le calcul des bordures à l’intérieur de la taille des éléments */
+    box-sizing: border-box; 
+}
+
+body, html { 
+    width: 100%; height: 100%; 
+    /* Empêche le défilement avec le doigt pour garder l’effet d’application */
+    overflow: hidden; 
+    font-family: 'Playfair Display', serif; 
+}
+
+/* --- 2. RIDEAUX RÉALISTES (L’OUVERTURE) --- */
+.curtain-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 9999; /* Toujours au-dessus du reste */
+    display: flex; cursor: pointer; overflow: hidden;
+}
+
+.curtain {
+    width: 50%; height: 100%;
+    /* Simulation du velours : dégradé qui se répète pour créer les plis */
+    background: repeating-linear-gradient(
+        to right,
+        #5a0000 0%, #8b0000 5%, #a30000 10%, #8b0000 15%, #5a0000 20%
+    );
+    background-size: 20% 100%;
+    /* Transition lente (2.5s) avec une courbe de vitesse élégante */
+    transition: transform 2.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    /* Ombre intérieure pour donner de la profondeur */
+    box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+/* Galon doré sur les bords du milieu */
+.curtain.left { border-right: 5px solid #d4af37; }
+.curtain.right { border-left: 5px solid #d4af37; }
+
+/* Texte “Cliquez pour ouvrir” */
+.click-hint {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); /* Centrage parfait */
+    color: #fff;
+    text-shadow: 0 0 15px #d4af37, 2px 2px 5px rgba(0,0,0,0.8);
+    font-family: 'Dancing Script', cursive; font-size: 2.2rem;
+    text-align: center; z-index: 10000;
+    pointer-events: none; /* Le clic passe à travers le texte vers le rideau */
+    animation: glow 2s infinite alternate; /* Effet de pulsation lumineuse */
+}
+
+@keyframes glow {
+    from { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* Animation quand on ajoute la classe .opened via JS */
+.opened .left { transform: translateX(-100%) skewX(-5deg); }
+.opened .right { transform: translateX(100%) skewX(5deg); }
+.opened {
+    visibility: hidden;
+    pointer-events: none;
+    transition: visibility 0s 2.5s; /* Cache l’élément après la fin de l’animation */
+}
+
+/* --- 3. ÉTAPES ET NAVIGATION --- */
+.step {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 20px;
+    /* Cache les étapes par défaut */
+    opacity: 0; visibility: hidden; transform: scale(1.1);
+    transition: all 0.8s ease-in-out;
+}
+
+/* L’étape devient visible quand elle reçoit la classe .active */
+.step.active { opacity: 1; visibility: visible; transform: scale(1); z-index: 10; }
+
+/* Espacement global des textes */
+.step h2 { margin-bottom: 25px; letter-spacing: 2px; }
+.step p { margin-bottom: 20px; font-size: 1.1rem; }
+
+/* --- 4. COULEURS DES FONDS --- */
+#step1 { background: #fdfaf6; }
+#step3 { background: #e3f2fd; } /* Couleur bleue pour le Civil */
+#step4 { background: #fffaf0; } /* Couleur ivoire pour le Religieux */
+#step5 { background: #f4e8e1; } /* Couleur chair pour la Réception */
+
+/* --- 5. ÉLÉMENTS DE DESIGN --- */
+h1, h2 { font-family: 'Dancing Script', cursive; color: #b08d23; font-size: 2.5rem; }
+
+/* Design des images */
+.photo-container img, .info-img img { 
+    width: 100%; max-width: 280px; border-radius: 10px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+}
+.info-img, .photo-container { margin: 25px; }
+
+/* --- STYLES ÉLÉMENTS --- */
+h1, h2 { font-family: 'Dancing Script', cursive; color: #b08d23; font-size: 2.5rem; margin-bottom: 10px; }
+.photo-container img, .info-img img { width: 100%; max-width: 280px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.info-img, .photo-container, .location-photo {margin: 25px;}/*espace important au dessus et en dessous des images*/
+.next-btn { background: #d4af37; color: white; padding: 12px 20px; border: none; border-radius: 20px; cursor: pointer; margin-top: 15px; }
+#muteBtn { 
+    position: fixed;
+    bottom: 30px; 
+    right: 25px; 
+    z-index: 10000; 
+    border: none; 
+    background: rgba(255,255,255,0.7); 
+    border-radius: 50%;
+    width: 50px;
+    height: 50px; 
+    font-size: 1.5rem; 
+    cursor: pointer; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.whatsapp-btn { background: #25D366; color: white; padding: 12px 20px; border: none; border-radius: 20px; cursor: pointer; margin-top: 10px; }
+.countdown-circle { width: 100px; height: 100px; border: 3px double #d4af37; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #8b0000; font-weight: bold; margin: 15px 0; }
+.cadeaux-box { text-align: left; padding: 15px; border: 1px dashed #d4af37; border-radius: 8px; line-height: 2; }
+
+/* Le cadre des mariés Yves & Yvette */
+.names-frame {
+    position: relative; padding: 30px 50px; margin: 30px 0;
+    font-size: 2.8rem; font-family: 'Dancing Script', cursive;
+    color: #b08d23; background: #fff;
+    border: 1px solid #d4af37;
+    outline: 4px solid #fdfaf6; /* Espace blanc entre les deux bordures */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05), inset 0 0 15px rgba(212, 175, 55, 0.1);
+    border-radius: 2px;
+
+    /* Double bordure élégante */
+    border: 1px solid #d4af37;
+    outline: 4px solid #fdfaf6; /* Espace entre les deux bordures */
+    box-shadow: 
+        0 10px 30px rgba(0,0,0,0.05), /* Ombre portée douce */
+        inset 0 0 15px rgba(212, 175, 55, 0.1); /* Lueur intérieure */
+        
+    border-radius: 2px;
+}
+.names-frame::before {  /* Ajout de petits coins décoratifs sur le cadre */
+    content: "✨";
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    padding: 0 10px;
+    font-size: 1.2rem;
+}
+
+
+/* --- 6. CALENDRIER --- */
+.calendar-container {
+    background: #fff; padding: 20px; border: 1px solid #d4af37;
+    border-radius: 10px; margin: 20px 0; width: 280px;
+}
+
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+
+/* Animation des dates 15 et 16 */
+.calendar-grid .highlight {
+    background: #d4af37; color: white !important;
+    border-radius: 50%; transform: scale(1.2);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1.2); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1.2); }
+}
+
+/* --- 7. LES FLEURS DÉCORATIVES --- */
+.step::before, .step::after {
+    content: ""; position: absolute;
+    width: 150px; height: 150px;
+    background-size: contain; background-repeat: no-repeat;
+    z-index: 1; pointer-events: none; opacity: 0.8;
+    display: none; /* Cachées par défaut */
+}
+
+/* Fleur en haut à gauche */
+.step::before { top: 0; left: 0; background-image: url('images/white-flowers-hg.jpg') }
+
+/* Fleur (ou bague) en haut à droite */
+.step::after { top: 0; right: 0; background-image: url('images/bague-sans-fond.jpg'); }
+
+/* On affiche les fleurs uniquement sur les étapes listées ici */
+#step2::before, #step2::after,
+#step_cal:before, #step_cal:after,
+#step6::before, #step6::after,
+#step7::before, #step7::after,
+#step8::before, #step8::after {
+    display: block;
+}
+
+/* --- 8. RESPONSIVE (ADAPTATION MOBILE) --- */
+@media (max-width: 600px) {
+    .step::before, .step::after { width: 100px; height: 100px; }
+    h1, h2 { font-size: 2rem; }
+    .names-frame { font-size: 2.2rem; padding: 20px 30px; }
+}
